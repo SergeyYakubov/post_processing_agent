@@ -23,13 +23,11 @@ jobs:
       run: |
         docker buildx create --use
         docker buildx build --tag postprocess --target=package -f Dockerfile .
+        docker run -v ${{ github.workspace }}:/store postprocess cp root/rpmbuild/RPMS/noarch/*.rpm /store
       continue-on-error: false
-
-    - name: Move RPM to Artifact
-      run: mv /root/rpmbuild/RPMS/noarch/postprocessing-2.6-1.noarch.rpm $GITHUB_WORKSPACE/package.rpm
 
     - name: Upload RPM as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: postprocessing
-        path: $GITHUB_WORKSPACE/package.rpm
+        path: $GITHUB_WORKSPACE/postprocessing-2.6-1.noarch.rpm
