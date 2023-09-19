@@ -20,8 +20,12 @@ jobs:
         ls -la
       continue-on-error: false
 
-    - name: Upload RPM as Artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload Release Assets
+      uses: softprops/action-gh-release@v1
       with:
-        name: postprocessing
-        path: postprocessing-2.6-1.noarch.rpm
+        files: |
+          postprocessing-2.6-1.noarch.rpm
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
