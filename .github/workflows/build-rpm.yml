@@ -16,11 +16,11 @@ jobs:
     - name: Build RPM inside Docker
       run: |
         docker build --tag postprocess --target=package -f Dockerfile .
-        docker run -v $GITHUB_WORKSPACE:/store postprocess mv /root/rpmbuild/RPMS/noarch/postprocessing-2.6-1.noarch.rpm /store
+        docker run -v `pwd`:/store postprocess mv /root/rpmbuild/RPMS/noarch/postprocessing-2.6-1.noarch.rpm /store
       continue-on-error: false
 
     - name: Upload RPM as Artifact
       uses: actions/upload-artifact@v2
       with:
         name: postprocessing
-        path: $GITHUB_WORKSPACE/postprocessing-2.6-1.noarch.rpm
+        path: postprocessing-2.6-1.noarch.rpm
