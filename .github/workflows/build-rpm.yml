@@ -21,8 +21,7 @@ jobs:
 
     - name: Build RPM inside Docker
       run: |
-        docker buildx create --use
-        docker buildx build --tag postprocess --target=package -f Dockerfile .
+        docker build --tag postprocess --target=package -f Dockerfile .
         docker run -v ${{ github.workspace }}:/store postprocess cp root/rpmbuild/RPMS/noarch/*.rpm /store
       continue-on-error: false
 
