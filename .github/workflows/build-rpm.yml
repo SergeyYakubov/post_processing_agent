@@ -1,0 +1,35 @@
+name: Build RPM and Store
+
+on:
+  push:
+    branches:
+      - package-build-in-github
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v1
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Build RPM inside Docker
+      run: |
+        docker buildx create --use
+        docker buildx build --tag postprocess --target=package -f Dockerfile .
+      continue-on-error: false
+
+    - name: Move RPM to Artifact
+      run: mv /root/rpmbuild/RPMS/noarch/postprocessing-2.6-1.noarch.rpm $GITHUB_WORKSPACE/package.rpm
+
+    - name: Upload RPM as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: postprocessing
+        path: $GITHUB_WORKSPACE/package.rpm
